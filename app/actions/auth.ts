@@ -21,7 +21,12 @@ export async function signup(formData: FormData) {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
         options: {
-            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/auth/callback`,
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL
+                    ? process.env.NEXT_PUBLIC_SITE_URL
+                    : process.env.NEXT_PUBLIC_VERCEL_URL
+                        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+                        : "http://localhost:3000"
+                }/auth/callback`,
         },
     });
     if (error) return { error: error.message };
